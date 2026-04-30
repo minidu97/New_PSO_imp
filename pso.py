@@ -5,7 +5,6 @@ from typing import Callable, List, Tuple, Optional
 
 
 #CONFIGURATION
-
 @dataclass
 class PSOConfig:
 
