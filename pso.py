@@ -105,22 +105,7 @@ def run_standard_pso(func: Callable,
         for p in particles:
             r1 = np.random.rand(cfg.dim)
             r2 = np.random.rand(cfg.dim)
-
-            # ── TODO (Phase 1): Velocity update ──────────────────────
-            # p.velocity = (  w * p.velocity
-            #               + cfg.c1 * r1 * (p.pbest_pos - p.position)
-            #               + cfg.c2 * r2 * (gbest_pos   - p.position) )
-            # ─────────────────────────────────────────────────────────
             raise NotImplementedError("Phase 1: implement velocity update")
-
-            # ── TODO (Phase 1): Clamp velocity (optional but recommended)
-            # v_max = (cfg.ub - cfg.lb) * 0.2
-            # p.velocity = np.clip(p.velocity, -v_max, v_max)
-
-            # ── TODO (Phase 1): Position update ──────────────────────
-            # p.position = p.position + p.velocity
-            # p.position = np.clip(p.position, cfg.lb, cfg.ub)
-            # ─────────────────────────────────────────────────────────
             raise NotImplementedError("Phase 1: implement position update")
 
             #Evaluate & update pbest
@@ -138,13 +123,6 @@ def run_standard_pso(func: Callable,
 
 def build_archive(particles: List[Particle],
                   M: int) -> Tuple[List[Particle], float]:
-    
-    # ── TODO (Phase 2): Sort particles by pbest_fit (ascending = better) ─
-    # sorted_particles = sorted(particles, key=lambda p: p.pbest_fit)
-    # archive   = sorted_particles[:M]
-    # f_worst_M = archive[-1].pbest_fit
-    # return archive, f_worst_M
-    # ─────────────────────────────────────────────────────────────────────
     raise NotImplementedError("Phase 2: implement build_archive")
 
 
@@ -201,10 +179,6 @@ def tune_phi(func: Callable,
         run_results = []
 
         for _ in range(cfg.cec_runs):
-            # ── TODO (Phase 3): Call run_modified_pso, store best fitness ──
-            # _, best_fit, _ = run_modified_pso(func, cfg)
-            # run_results.append(best_fit)
-            # ──────────────────────────────────────────────────────────────
             raise NotImplementedError("Phase 3: implement phi tuning loop")
 
         results[phi] = run_results
@@ -216,13 +190,6 @@ def tune_phi(func: Callable,
 #CEC 2017 BENCHMARK EVALUATION
 
 def load_cec2017_function(func_id: int, dim: int) -> Callable:
-    # ── TODO (Phase 4): Replace with your CEC 2017 import ────────────
-    # Example using the 'cec2017' package:
-    #
-    # from cec2017.functions import all_functions
-    # func = lambda x: all_functions[func_id - 1](x)
-    # return func
-    # ─────────────────────────────────────────────────────────────────
     raise NotImplementedError("Phase 4: plug in your CEC 2017 function loader")
 
 
@@ -239,12 +206,6 @@ def run_cec2017_benchmark(cfg: PSOConfig) -> dict:
         print(f"\n── CEC2017 F{func_id:02d} ──")
 
         for run in range(cfg.cec_runs):
-            # ── TODO (Phase 4): Run both algorithms ──────────────────
-            # _, std_fit, _ = run_standard_pso(func, cfg)
-            # _, mod_fit, _ = run_modified_pso(func, cfg)
-            # std_results.append(std_fit)
-            # mod_results.append(mod_fit)
-            # ─────────────────────────────────────────────────────────
             raise NotImplementedError("Phase 4: implement benchmark runs")
 
         report[func_id] = {
@@ -321,7 +282,6 @@ def plot_benchmark_comparison(report: dict) -> None:
 #simple sample test function
 
 def sphere(x: np.ndarray) -> float:
-    """Simple Sphere function — use this to test Phase 1 before CEC 2017."""
     return float(np.sum(x ** 2))
 
 
