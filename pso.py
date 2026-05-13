@@ -34,6 +34,8 @@ class PSOConfig:
 
     # Archive (Top-M)
     p: float  = 0.1         # Archive fraction  →  M = floor(p * NP)
+    p_min: float = 0.05     # Minimum archive fraction
+    diversity_threshold: float = 1e6  # Fitness std below this and then it shrink archive
 
     # phi parameter
     phi: float = 0.5        # Blending parameter φ ∈ [0, 1]
@@ -143,10 +145,18 @@ def run_standard_pso(func: Callable,
 #PHASE 2 — ELITE ARCHIVE (TOP-M)
 
 def build_archive(particles: List[Particle],
-                  M: int) -> Tuple[List[Particle], float]:
+                  M: int,
+                  cfg: PSOConfig) -> Tuple[List[Particle], float]:
+    diversity = float(np.std([p.pbest_fit for p in particles]))
+
+    if diversity < cfg.diversity_threshold:
+        M_adaptive = max(1, int(np.floor(cfg.p_min * cfg.NP)))
+    else:
+        M_adaptive = M
+
     sorted_particles = sorted(particles, key=lambda p: p.pbest_fit)
-    archive   = sorted_particles[:M]
-    f_worst_M = archive[-1].pbest_fit   # worst fitness still inside top-M
+    archive   = sorted_particles[:M_adaptive]
+    f_worst_M = archive[-1].pbest_fit
     return archive, f_worst_M
 
 
@@ -167,7 +177,7 @@ def run_modified_pso(func: Callable,
         w = cfg.w - (cfg.w - cfg.w_min) * (t / cfg.T)
 
         # Build elite archive this iteration
-        archive, f_worst_M = build_archive(particles, cfg.M)
+        archive, f_worst_M = build_archive(particles, cfg.M, cfg)
 
         for p in particles:
 
