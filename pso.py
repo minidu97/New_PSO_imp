@@ -39,6 +39,7 @@ class PSOConfig:
 
     # phi parameter
     phi: float = 0.5        # Blending parameter φ ∈ [0, 1]
+    mutation_scale: float = 0.01  # Gaussian noise streangth 
 
     # CEC 2017
     cec_func_id: int = 1    # CEC 2017 function ID (1–29)
@@ -203,6 +204,9 @@ def run_modified_pso(func: Callable,
             # Position update
             p.position = p.position + p.velocity
             p.position = np.clip(p.position, cfg.lb, cfg.ub)
+            sigma = (cfg.ub - cfg.lb) * cfg.mutation_scale * (1 - t / cfg.T)
+            p.position += np.random.normal(0, sigma, cfg.dim)
+            p.position  = np.clip(p.position, cfg.lb, cfg.ub)
 
             fit_new = func(p.position)
             p.update_pbest(fit_new)
